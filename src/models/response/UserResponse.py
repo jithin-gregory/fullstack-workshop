@@ -4,6 +4,7 @@ from utils.contants.UserRole import UserRole
 
 
 class UserResponse(BaseModel):
+    id: str
     email: str
     username: str
     first_name: str
