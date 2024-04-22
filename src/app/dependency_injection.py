@@ -1,5 +1,3 @@
-from fastapi import Depends
-
 from config import MONGO_CONFIG
 from database.MongoDBClient import MongoDBClient
 

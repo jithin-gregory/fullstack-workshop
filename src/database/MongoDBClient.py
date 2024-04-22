@@ -36,7 +36,6 @@ class MongoDBClient:
             self.database_name = database_name
         return self
 
-
     def get_database(self):
         """
         Returns the database object for the specified database name.
@@ -64,7 +63,7 @@ class MongoDBClient:
         result = collection.insert_one(document)
         return result.inserted_id
 
-    async def find_one(self, collection_name: str, filter: dict = None):
+    def find_one(self, collection_name: str, filter: dict = None):
         """
         Finds one document in a collection that matches the given filter.
 
@@ -78,7 +77,7 @@ class MongoDBClient:
 
         database = self.get_database()
         collection = database[collection_name]
-        return await collection.find_one(filter)
+        return collection.find_one(filter)
 
     def find_all(self, collection_name: str, filter: dict = None):
         """
@@ -94,7 +93,10 @@ class MongoDBClient:
 
         database = self.get_database()
         collection = database[collection_name]
-        return collection.find(filter, sort=None)  # You can add sorting options here
+        cursor = collection.find(filter, sort=None)  # You can add sorting options here
+
+        for document in cursor:
+            yield document
 
     def update_one(self, collection_name: str, filter: dict, update_document: dict):
         """

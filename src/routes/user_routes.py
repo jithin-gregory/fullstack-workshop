@@ -8,10 +8,14 @@ router = APIRouter()
 
 
 @router.get("/")
-async def get_users(user_service: UserService = Depends(UserService)) -> APIResponse[list[UserResponse]]:
-    users = await user_service.get_all_users()
+async def get_all_users(user_service: UserService = Depends(UserService)) -> APIResponse[list[UserResponse]]:
+    users = user_service.get_all_users()
 
-    return APIResponse[list[UserResponse]](data=users, message="Successfully retrieved user details.", status_code=200)
+    return create_response(
+        APIResponse[list[UserResponse]](
+            data=users,
+            message="Successfully retrieved user details.",
+            status_code=200))
 
 
 @router.post("/",

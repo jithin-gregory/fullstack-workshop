@@ -1,13 +1,11 @@
 from fastapi import Depends
-from models.response import UserResponse
-from models.request import CreateUserRequest
-from app.dependency_injection import mongo_client
 
-from database.MongoDBClient import MongoDBClient
-from database.schemas import UserDocument
 from database.repositories import UserRepository
-from utils.contants import db_constants
+from database.schemas import UserDocument
+from models.request import CreateUserRequest
+from models.response import UserResponse
 from utils.password_helper import hash_password
+
 
 class UserService:
     def __init__(self, user_repository: UserRepository = Depends(UserRepository)):
@@ -30,10 +28,18 @@ class UserService:
                                 user_role=user.user_role)
         return response
 
-    async def get_all_users(self) -> list[UserResponse]:
-        users = self.db_client.find_all(db_constants.USER_COLLECTION, {})
+    def get_all_users(self) -> list[UserResponse]:
+        users = self.user_repository.find({})
 
-        return users
+        resp_users = []
+        for user in users:
+            resp_users.append(UserResponse(id=user.id,
+                                           email=user.email,
+                                           username=user.username,
+                                           first_name=user.first_name,
+                                           last_name=user.last_name,
+                                           user_role=user.user_role))
+        return resp_users
 
     async def get_user_by_email(self, email):
         user = {

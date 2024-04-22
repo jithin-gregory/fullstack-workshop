@@ -1,8 +1,10 @@
+import datetime
+import uuid
+
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from pydantic import BaseModel, BaseConfig, Field
-import datetime
-import uuid
+
 
 class OID(str):
     @classmethod
