@@ -3,3 +3,4 @@ pymongo
 uvicorn
 pydantic
 bcrypt
+python-multipart
