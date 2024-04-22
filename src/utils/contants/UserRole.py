@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class UserRole(Enum):
+class UserRole(IntEnum):
     """
     Enum representing different user roles in the application.
     """

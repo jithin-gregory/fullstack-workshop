@@ -1,9 +1,8 @@
 from fastapi import APIRouter
 
-from models.response import APIResponse, UserResponse
-from services.user_service import UserService
+from models.response import APIResponse
 from services.user_service import *
-from config import MONGO_CONFIG
+from utils import create_response
 
 router = APIRouter()
 
@@ -15,8 +14,10 @@ async def get_users(user_service: UserService = Depends(UserService)) -> APIResp
     return APIResponse[list[UserResponse]](data=users, message="Successfully retrieved user details.", status_code=200)
 
 
-@router.post("/", response_model=APIResponse[str])
+@router.post("/",
+             response_model=APIResponse[UserResponse],
+             status_code=201,
+             description="User created successfully.")
 async def create_user(request: CreateUserRequest, user_service: UserService = Depends(UserService)):
-    id = user_service.create_user(request)
-
-    return APIResponse(data=id, message="User created successfully.", status_code=201)
+    response_data = user_service.create_user(request)
+    return create_response(APIResponse(data=response_data, message="User created successfully.", status_code=201))
