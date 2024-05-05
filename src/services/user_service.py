@@ -1,9 +1,12 @@
-from fastapi import Depends
+import uuid
+
+from fastapi import Depends, HTTPException
 
 from database.repositories import UserRepository
 from database.schemas import UserDocument
 from models.request import CreateUserRequest
 from models.response import UserResponse
+from services.image_service import ImageService
 from utils.password_helper import hash_password
 
 
@@ -12,7 +15,11 @@ class UserService:
         self.user_repository = user_repository
 
     def create_user(self, request: CreateUserRequest):
-        user = UserDocument(email=request.email,
+        if self.is_user_exists(request.username):
+            raise HTTPException(status_code=400, detail='User already exists')
+
+        user = UserDocument(id=str(uuid.uuid4()),
+                            email=request.email,
                             username=request.username,
                             first_name=request.first_name,
                             last_name=request.last_name,
@@ -38,16 +45,17 @@ class UserService:
                                            username=user.username,
                                            first_name=user.first_name,
                                            last_name=user.last_name,
-                                           user_role=user.user_role))
+                                           user_role=user.user_role,
+                                           image_url=self.__get_profile_image_path(user.id)))
         return resp_users
 
-    async def get_user_by_email(self, email):
-        user = {
-            'email': email,
-            'username': email.split('@')[0],
-            'first_name': 'John',
-            'last_name': 'Doe',
-            'user_role': 1
-        }
+    def is_user_exists(self, username: str) -> bool:
+        users = self.user_repository.find({'username': username})
+        return len(users) > 0
 
-        return user
+    @staticmethod
+    def __get_profile_image_path(user_id: str) -> str:
+        image_service = ImageService()
+        return image_service.get_image_path(user_id)
+
+

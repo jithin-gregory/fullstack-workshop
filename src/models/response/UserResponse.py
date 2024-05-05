@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 from utils.contants.UserRole import UserRole
 
@@ -10,3 +12,4 @@ class UserResponse(BaseModel):
     first_name: str
     last_name: str
     user_role: UserRole
+    image_url: Optional[str] = None

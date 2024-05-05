@@ -29,13 +29,15 @@ async def create_user(request: CreateUserRequest, user_service: UserService = De
 
 
 @router.post("/{user_id}/upload-image")
-async def upload_user_image(user_id: str, image: UploadFile = File(description="Upload an profile image"), image_service: ImageService = Depends(ImageService)):
+async def upload_user_image(user_id: str, image: UploadFile = File(description="Upload an profile image"),
+                            image_service: ImageService = Depends(ImageService)):
     if image.content_type not in ("image/jpeg", "image/png"):
-        return create_response(APIResponse(data=None, message="Unsupported media type. Only JPEG and PNG images allowed.", status_code=415))
+        return create_response(
+            APIResponse(data=None, message="Unsupported media type. Only JPEG and PNG images allowed.",
+                        status_code=415))
     try:
         image_service.upload_image(image, user_id)
     except Exception:
         return create_response(APIResponse(data=None, message="Failed to upload profile image.", status_code=500))
 
     return create_response(APIResponse(data=None, message="Profile image uploaded successfully.", status_code=201))
-
