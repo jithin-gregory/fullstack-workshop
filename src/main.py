@@ -35,14 +35,14 @@ app = FastAPI(openapi_tags=[
 },)
 
 app.include_router(user_router)
-app.add_middleware(
-    JWTMiddleware,
-    exempt_routes=["/token", "/register",
-                   "/docs",  # Swagger UI
-                   "/redoc",  # Redoc documentation
-                   "/openapi.json",  # OpenAPI schema
-                   ],
-)
+# app.add_middleware(
+#     JWTMiddleware,
+#     exempt_routes=["/token", "/register",
+#                    "/docs",  # Swagger UI
+#                    "/redoc",  # Redoc documentation
+#                    "/openapi.json",  # OpenAPI schema
+#                    ],
+# )
 
 
 @app.get("/")
