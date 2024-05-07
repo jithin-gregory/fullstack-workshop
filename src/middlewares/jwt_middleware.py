@@ -1,11 +1,9 @@
 from fastapi import FastAPI, Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 import jwt
+from utils.jwt_utils import validate_access_token
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 
-# Constants for JWT configuration
-SECRET_KEY = "my_super_secret_key"
-ALGORITHM = "HS256"
 
 # Middleware class to verify JWT tokens
 class JWTMiddleware(BaseHTTPMiddleware):
@@ -32,13 +30,11 @@ class JWTMiddleware(BaseHTTPMiddleware):
 
         # Verify the JWT token
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            validate_access_token(token)
         except ExpiredSignatureError:
             raise HTTPException(status_code=401, detail="Unauthorized: Token expired")
         except InvalidTokenError:
-            raise HTTPException(
-                status_code=401, detail="Unauthorized: Invalid token"
-            )
+            raise HTTPException(status_code=401, detail="Unauthorized: Invalid token")
 
         # If the token is valid, continue to the next middleware/endpoint
         return await call_next(request)
