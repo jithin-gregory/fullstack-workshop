@@ -1,54 +1,47 @@
-from fastapi import FastAPI
-from routes import router as user_router
-from jwt_middleware import JWTMiddleware
+from typing import Annotated
+from fastapi import Depends, FastAPI
+from fastapi.security import HTTPBearer, OAuth2PasswordBearer
 
-app = FastAPI(openapi_tags=[
-    {
-        "name": "Auth",
-        "description": "Authentication and authorization endpoints",
-    },
-    {
-        "name": "Registration",
-        "description": "User registration endpoints",
-    },
-],
-    # Define security schema to support Bearer tokens in Swagger UI
-    openapi_schema={
-        "openapi": "3.0.0",
-        "info": {
-            "title": "My FastAPI Application",
-            "version": "1.0.0",
-        },
-        "paths": {},
-        "components": {
-            "securitySchemes": {
-                "bearerAuth": {
-                    "type": "http",
-                    "scheme": "bearer",
-                    "bearerFormat": "JWT",
-                },
-            },
-        },
-        "security": [
-            {"bearerAuth": []},
-        ],
-},)
+from middlewares.jwt_middleware import JWTMiddleware
 
-app.include_router(user_router)
-# app.add_middleware(
-#     JWTMiddleware,
-#     exempt_routes=["/token", "/register",
-#                    "/docs",  # Swagger UI
-#                    "/redoc",  # Redoc documentation
-#                    "/openapi.json",  # OpenAPI schema
-#                    ],
-# )
+from routers.auth import router as auth_router
+from routers.user import router as user_router
+
+
+app = FastAPI(
+    title="Fullstack Workshop Demo App",
+    description="This API documentation serves as the reference guide for the Demo app developed during the Full Stack Workshop.",
+)
+
+app.add_middleware(
+    JWTMiddleware,
+    exempt_routes=[
+        "/api/auth/token",
+        "/docs",  # Swagger UI
+        "/redoc",  # Redoc documentation
+        "/openapi.json",  # OpenAPI schema
+    ],
+)
+
+security = HTTPBearer(
+    description="Enter the Bearer Authorization string without <code>Bearer</code>"
+)
+
+app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(
+    user_router,
+    prefix="/api/user",
+    tags=["User"],
+    dependencies=[Depends(security)],
+)
 
 
 @app.get("/")
-async def root():
+async def root(token: Annotated[str, Depends(security)]):
     return {"message": "Welcome to the User Management API"}
+
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

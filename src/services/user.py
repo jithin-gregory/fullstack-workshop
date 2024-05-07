@@ -1,5 +1,5 @@
 import os
-from user_repository import UserRepository
+from repositories.user import UserRepository
 from fastapi import UploadFile
 from model.user_dto import UserDTO
 from model.user_request import UserRequest
