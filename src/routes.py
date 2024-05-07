@@ -18,10 +18,14 @@ async def register_user(user: UserRequest):
     return {"user_id": user_id}
 
 
-@router.get("/users", response_model=list)
+@router.get("/users", response_model=list[UserDTO])
 async def get_all_users():
     users = user_service.get_all_users()
     return users
+
+@router.get("/users/{user_id}", response_model=UserDTO)
+async def get_user(user_id: str):
+    return user_service.get_user(user_id)
 
 
 @router.post("/users/{user_id}/upload_image", response_model=dict)
