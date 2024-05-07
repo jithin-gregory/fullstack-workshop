@@ -4,7 +4,6 @@ from model.login_request import LoginRequest
 from utils.jwt_utils import create_access_token
 from services.user import UserService
 
-
 router = APIRouter()
 user_service = UserService()
 

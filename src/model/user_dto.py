@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class UserDTO(BaseModel):
     id: str
     email: str

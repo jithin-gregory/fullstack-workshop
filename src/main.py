@@ -7,7 +7,6 @@ from middlewares.jwt_middleware import JWTMiddleware
 from routers.auth import router as auth_router
 from routers.user import router as user_router
 
-
 app = FastAPI(
     title="Fullstack Workshop Demo App",
     description="This API documentation serves as the reference guide for the Demo app developed during the Full Stack Workshop.",
@@ -27,17 +26,20 @@ security = HTTPBearer(
     description="Enter the Bearer Authorization string without <code>Bearer</code>"
 )
 
-app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(
+    auth_router, 
+    prefix="/api/auth", 
+    tags=["Authentication"])
+
 app.include_router(
     user_router,
     prefix="/api/user",
     tags=["User"],
-    dependencies=[Depends(security)],
-)
+    dependencies=[Depends(security)])
 
 
-@app.get("/")
-async def root(token: Annotated[str, Depends(security)]):
+@app.get("/", dependencies=[Depends(security)])
+async def root():
     return {"message": "Welcome to the User Management API"}
 
 

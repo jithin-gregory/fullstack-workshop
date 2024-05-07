@@ -4,7 +4,6 @@ from services.user import UserService
 from fastapi.security import OAuth2PasswordRequestForm
 from model.user_dto import UserDTO
 from model.user_request import UserRequest
-from utils.jwt_utils import create_access_token
 import os
 
 router = APIRouter()
