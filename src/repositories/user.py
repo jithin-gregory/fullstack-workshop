@@ -22,9 +22,3 @@ class UserRepository:
 
     def get_user(self, user_id):
         return self.db.users.find_one({"_id": ObjectId(user_id)})
-
-    def get_user_by_username(self, username: str):
-        user_data = self.db.users.find_one({"username": username})
-        if user_data:
-            return UserDocument(**user_data)
-        return None

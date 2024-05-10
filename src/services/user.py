@@ -18,22 +18,15 @@ class UserService:
         user_document.password = self.pwd_context.hash(user.password)
         return self.repo.create_user(user_document)
 
-    def authenticate_user(self, username: str, password: str):
-        user = self.repo.get_user_by_username(username)
-        print(user)
-        if not user or not self.pwd_context.verify(password, user.password):
-            return None
-        return user
-
     def get_all_users(self):
         users = self.repo.get_all_users()
         user_dto_list = [
             UserDTO(
-                id=str(user['_id']),
-                email=user['email'],
-                username=user['username'],
-                first_name=user['first_name'],
-                last_name=user['last_name'],
+                id=str(user["_id"]),
+                email=user["email"],
+                username=user["username"],
+                first_name=user["first_name"],
+                last_name=user["last_name"],
             )
             for user in users
         ]
@@ -58,9 +51,9 @@ class UserService:
     def get_user(self, user_id: str):
         user = self.repo.get_user(user_id)
         return UserDTO(
-            id=str(user['_id']),
-            email=user['email'],
-            username=user['username'],
-            first_name=user['first_name'],
-            last_name=user['last_name'],
+            id=str(user["_id"]),
+            email=user["email"],
+            username=user["username"],
+            first_name=user["first_name"],
+            last_name=user["last_name"],
         )
