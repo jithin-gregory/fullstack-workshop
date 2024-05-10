@@ -7,6 +7,4 @@ class UserDocument(BaseModel):
     first_name: str
     last_name: str
     password: str
-
-    class Config:
-        orm_mode = True
+    is_admin: bool = False

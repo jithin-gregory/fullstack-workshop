@@ -29,11 +29,11 @@ class UserService:
         users = self.repo.get_all_users()
         user_dto_list = [
             UserDTO(
-                id=str(user['_id']),
-                email=user['email'],
-                username=user['username'],
-                first_name=user['first_name'],
-                last_name=user['last_name'],
+                id=str(user["_id"]),
+                email=user["email"],
+                username=user["username"],
+                first_name=user["first_name"],
+                last_name=user["last_name"],
             )
             for user in users
         ]
@@ -58,9 +58,10 @@ class UserService:
     def get_user(self, user_id: str):
         user = self.repo.get_user(user_id)
         return UserDTO(
-            id=str(user['_id']),
-            email=user['email'],
-            username=user['username'],
-            first_name=user['first_name'],
-            last_name=user['last_name'],
+            id=str(user["_id"]),
+            email=user["email"],
+            username=user["username"],
+            first_name=user["first_name"],
+            last_name=user["last_name"],
+            is_admin=user["is_admin"],
         )
