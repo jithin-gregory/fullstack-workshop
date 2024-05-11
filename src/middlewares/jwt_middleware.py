@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 import jwt
 from utils.jwt_utils import validate_access_token
@@ -20,10 +21,9 @@ class JWTMiddleware(BaseHTTPMiddleware):
         # Get the authorization header
         auth_header = request.headers.get("authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
-            
-            raise HTTPException(
+            return JSONResponse(
                 status_code=401,
-                detail="Unauthorized: Bearer token missing or incorrect",
+                content="Unauthorized: Bearer token missing or incorrect",
             )
 
         # Extract the JWT token from the header
@@ -33,9 +33,15 @@ class JWTMiddleware(BaseHTTPMiddleware):
         try:
             validate_access_token(token)
         except ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Unauthorized: Token expired")
+            return JSONResponse(
+                status_code=401,
+                content="Unauthorized: Token expired",
+            )
         except InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Unauthorized: Invalid token")
+            return JSONResponse(
+                status_code=401,
+                content="Unauthorized: Invalid token",
+            )
 
         # If the token is valid, continue to the next middleware/endpoint
         return await call_next(request)
