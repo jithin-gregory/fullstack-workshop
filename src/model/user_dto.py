@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class UserDTO(BaseModel):
     id: str
-    email: str
+    email: EmailStr
     username: str
     first_name: str
     last_name: str
