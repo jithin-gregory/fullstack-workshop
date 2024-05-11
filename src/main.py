@@ -1,7 +1,6 @@
-from typing import Annotated
 from fastapi import Depends, FastAPI
-from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBearer, OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
+from fastapi.middleware.cors import CORSMiddleware
 
 from middlewares.jwt_middleware import JWTMiddleware
 
@@ -12,7 +11,13 @@ app = FastAPI(
     title="Fullstack Workshop Demo App",
     description="This API documentation serves as the reference guide for the Demo app developed during the Full Stack Workshop.",
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow requests from any origin
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 app.add_middleware(
     JWTMiddleware,
     exempt_routes=[
