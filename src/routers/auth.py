@@ -22,4 +22,8 @@ async def login(request: LoginRequest):
     access_token = create_access_token(data={"sub": user.username})
 
     # Return the JWT token to the client
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "is_admin": user.is_admin,
+    }

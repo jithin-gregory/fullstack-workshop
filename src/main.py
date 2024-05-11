@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import Depends, FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBearer, OAuth2PasswordBearer
 
 from middlewares.jwt_middleware import JWTMiddleware
@@ -26,16 +27,11 @@ security = HTTPBearer(
     description="Enter the Bearer Authorization string without <code>Bearer</code>"
 )
 
-app.include_router(
-    auth_router, 
-    prefix="/api/auth", 
-    tags=["Authentication"])
+app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
 
 app.include_router(
-    user_router,
-    prefix="/api/user",
-    tags=["User"],
-    dependencies=[Depends(security)])
+    user_router, prefix="/api/user", tags=["User"], dependencies=[Depends(security)]
+)
 
 
 @app.get("/", dependencies=[Depends(security)])
@@ -46,4 +42,4 @@ async def root():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

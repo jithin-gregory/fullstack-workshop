@@ -20,6 +20,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
         # Get the authorization header
         auth_header = request.headers.get("authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
+            
             raise HTTPException(
                 status_code=401,
                 detail="Unauthorized: Bearer token missing or incorrect",
