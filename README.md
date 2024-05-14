@@ -5,17 +5,20 @@
 This is the Demo app developed during the Full Stack Workshop using Python FastAPI. It has a predefined folder structure and features various components like routers, services, models, and more.
 
 ## Folder Structure
-
-- **src**: The source directory containing all project code.
-  - **main.py**: Entry point of the application.
-  - **document**: Database documents or schemas.
-  - **middlewares**: Middleware components for the application.
-  - **model**: Request and response models.
-  - **repositories**: Data access layer or repositories.
-  - **routers**: API routers.
-  - **services**: Business logic layer or services.
-  - **utils**: Utility functions or helpers.
-- **requirements.txt**: List of Python dependencies required for the project.
+```bash
+│
+└── src/  
+│   ├── main.py                 # Entry point of the application
+│   ├── document/               # Database documents or schemas
+│   ├── middlewares/            # Middleware components for the application
+│   ├── model/                  # Request and response models
+│   ├── repositories/           # Data access layer or repositories
+│   ├── routers/                # API routers
+│   ├── services/               # Business logic layer or services
+│   └── utils/                  # Utility functions or helpers
+│
+└── requirements.txt            # List of Python dependencies required for the project
+```
 
 ## Setup
 
@@ -42,8 +45,8 @@ This command starts the server and enables automatic reloading on code changes.
 After starting the server, you can access the Swagger documentation at http://localhost:8000/docs. Swagger provides a user-friendly interface to interact with and test the API endpoints.
 
 ## Contributors
-- Jithin Gregory
-- Jemshith T K
+- [Jithin Gregory](https://github.com/jithin-gregory)
+- [Jemshith T K](https://github.com/dev-thakku)
 - Mohammed Hafiz
 - Prince Martin
 
